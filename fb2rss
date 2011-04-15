@@ -1,0 +1,100 @@
+#!/usr/bin/env python
+
+# Call with fb2rss in.json out.rss. Json files for the news can be gotten from
+# https://graph.facebook.com/me/home?access_token=token
+# and your token can be found at http://developers.facebook.com/docs/reference/api/
+from xml.sax.saxutils import escape
+import json
+import sys
+input = open(sys.argv[1])
+output = open(sys.argv[2],'w')
+js = json.load(input)
+data = js['data']
+
+# contains for each post : author, title, type, html, link to page
+posts = []
+
+for elem in data:
+    try:
+        post = {}
+        post['author'] = elem['from']['name']
+        post['type'] = elem['type']
+        post['date'] = elem['created_time']
+        links = elem['id'].split('_')
+        post['link'] = 'http://www.facebook.com/profile.php?id='+links[0] + '&story_fbid=' + links[1]
+
+        # fill title and html according to the type
+        if elem['type'] == 'link':
+            link = elem['link']
+            post['title'] = elem['name']
+            post['html'] = '<a href="' + link + '">' + elem['name'] + '</a>'
+            if elem.has_key('message'):
+                post['html'] += '<br/><br/>'
+                post['html'] += elem['message']
+
+        #documentation is wrong : status can have a "to" field
+        #hence, treat message and status as the same thing
+        elif elem['type'] == 'message' or elem['type'] == 'status':
+            recipients = ''
+            if elem.has_key('to'):
+                for rec in elem['to']['data']:
+                    recipients += rec['name'] + ', '
+                recipients = recipients.strip(', ')
+            if recipients != '':
+                post['title'] = 'To ' + recipients + ': ' + elem['message']
+                post['html'] = 'Message to ' + recipients
+                post['html'] += '<br/><br/>'
+                post['html'] += elem['message']
+            else:
+                post['title'] = elem['message']
+                post['html'] = elem['message']
+
+        elif elem['type'] == 'photo':
+            if elem.has_key('name'):
+                post['title'] = elem['name']
+            else:
+                post['title'] = 'Photo from ' + post['author']
+
+            post['html'] = '<img src="' + elem['picture'] + '"/>'
+
+            if(elem.has_key('message')):
+                post['html'] += '<br/><br/>'
+                post['html'] += elem['message']
+                
+        elif elem['type'] == 'video':
+            post['title'] = elem['name']
+            post['html'] = '<a href="' + elem['source'] + '">' + '<img src="' + elem['picture'] + '"></a>'
+            post['html'] += '<br/><br/>'
+            if(elem.has_key('message')):
+                post['html'] += elem['message']
+                post['html'] += '<br/><br/>'
+            post['html'] += '<a href="' + elem['source'] + '">Video</a>'
+        else:
+            post['title'] = 'Unsupported type ' + elem['type']
+            post['html'] = 'Patch me, please'
+    except:
+        post['title'] = 'Error in feed parsing, please fix'
+        post['html'] = 'Json content: ' + elem
+
+    posts.append(post)
+
+rss = '<?xml version="1.0" encoding="utf-8"?>\n\
+<rss version="2.0">\n\
+<channel>\n\
+<title>Facebook</title>\n\
+<description>TODO</description>\n\
+<link>TODO</link>\n'
+
+for post in posts:
+    rss += '<item>\n'
+    rss += '<author>' + post['author'] + '</author>\n'
+    rss += '<title>' + post['title'] + '</title>\n'
+    rss += '<description>' + escape(post['html']) + '</description>\n'
+    rss += '<pubDate>' + post['date'] + '</pubDate>\n'
+    rss += '<link>' + post['link'] + '</link>\n'
+    rss += '</item>\n'
+
+rss += '</channel>\
+</rss>'
+
+output.write(rss.encode('utf-8'))
