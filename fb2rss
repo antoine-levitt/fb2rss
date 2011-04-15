@@ -6,9 +6,9 @@
 
 # Usage: fb2rss in.json out.rss
 
-# Json files for the news can be gotten from
-# https://graph.facebook.com/me/home?access_token=token
-# and your token can be found at http://developers.facebook.com/docs/reference/api/
+# Json files for the news feed can be gotten from
+# https://graph.facebook.com/me/home?access_token=token and your token
+# can be found from http://fbrell.com/auth/offline-access-token
 
 from xml.sax.saxutils import escape
 import json
