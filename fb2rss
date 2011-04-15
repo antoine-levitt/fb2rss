@@ -1,8 +1,15 @@
 #!/usr/bin/env python
 
-# Call with fb2rss in.json out.rss. Json files for the news can be gotten from
+# Fb2rss
+# Website: https://github.com/antoine-levitt/fb2rss
+# License: http://sam.zoy.org/wtfpl/
+
+# Usage: fb2rss in.json out.rss
+
+# Json files for the news can be gotten from
 # https://graph.facebook.com/me/home?access_token=token
 # and your token can be found at http://developers.facebook.com/docs/reference/api/
+
 from xml.sax.saxutils import escape
 import json
 import sys
@@ -11,7 +18,7 @@ output = open(sys.argv[2],'w')
 js = json.load(input)
 data = js['data']
 
-# contains for each post : author, title, type, html, link to page
+# contains for each post : author, title, type, html, link
 posts = []
 
 for elem in data:
@@ -82,8 +89,8 @@ rss = '<?xml version="1.0" encoding="utf-8"?>\n\
 <rss version="2.0">\n\
 <channel>\n\
 <title>Facebook</title>\n\
-<description>TODO</description>\n\
-<link>TODO</link>\n'
+<description>Facebook news feed. Produced by fb2rss, https://github.com/antoine-levitt/fb2rss</description>\n\
+<link>http://facebook.com</link>\n'
 
 for post in posts:
     rss += '<item>\n'
