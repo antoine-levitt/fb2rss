@@ -1,0 +1,15 @@
+Facebook exposes some RSS feeds, but has the annoying habit of hiding
+them, and randomly removing them.
+
+On the other hand, it does expose a rich JSON interface, available
+from http://developers.facebook.com/docs/reference/api/.
+
+This simple python utility parses the JSON into a RSS feed. It is very
+basic - patches welcome!
+
+Its main use is with gwene (see the source
+http://lars.ingebrigtsen.no/2011/04/running-rss-to-nntp-gateway.html )
+for private use inside a NTTP server, but you can just as well set it
+up on a private server and point your news readers to it.
+
+Contact, complaints and patches: antoine.levitt at gmail
