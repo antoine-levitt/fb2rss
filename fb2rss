@@ -21,7 +21,7 @@ for elem in data:
         post['type'] = elem['type']
         post['date'] = elem['created_time']
         links = elem['id'].split('_')
-        post['link'] = 'http://www.facebook.com/profile.php?id='+links[0] + '&story_fbid=' + links[1]
+        post['link'] = 'http://www.facebook.com/profile.php?id=' + links[0] + '&story_fbid=' + links[1]
 
         # fill title and html according to the type
         if elem['type'] == 'link':
