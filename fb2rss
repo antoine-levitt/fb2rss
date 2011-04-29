@@ -70,8 +70,12 @@ for elem in data:
                 
         elif elem['type'] == 'video':
             post['title'] = elem['name']
-            post['html'] = '<a href="' + elem['source'] + '">' + '<img src="' + elem['picture'] + '"></a>'
+            if(elem.has_key('picture')):
+                post['html'] = '<a href="' + elem['source'] + '">' + '<img src="' + elem['picture'] + '"></a>'
+            else:
+                post['html'] = '<a href="' + elem['source'] + '">' + 'Video</a>'
             post['html'] += '<br/><br/>'
+            
             if(elem.has_key('message')):
                 post['html'] += elem['message']
                 post['html'] += '<br/><br/>'
@@ -81,7 +85,7 @@ for elem in data:
             post['html'] = 'Patch me, please'
     except:
         post['title'] = 'Error in feed parsing, please fix'
-        post['html'] = 'Json content: ' + elem
+        post['html'] = 'Json content: ' + str(elem)
 
     posts.append(post)
 
