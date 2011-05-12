@@ -8,7 +8,9 @@
 
 # Json files for the news feed can be gotten from
 # https://graph.facebook.com/me/home?access_token=token and your token
-# can be found from http://fbrell.com/auth/offline-access-token
+# can be found from the lengthy instructions in the first answer of
+# http://stackoverflow.com/questions/1059640/facebook-offline-access-step-by-step
+# you will need to create your own app.
 
 from xml.sax.saxutils import escape
 import json
