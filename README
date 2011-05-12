@@ -8,8 +8,9 @@ This simple python utility parses the JSON into a RSS feed. It is very
 basic - patches welcome!
 
 Note that in order to get the json, you'll need an access
-token. http://fbrell.com/auth/offline-access-token provides personal
-permanent tokens.
+token. Access tokens have to be generated from an app - see the first
+answer of
+http://stackoverflow.com/questions/1059640/facebook-offline-access-step-by-step
 
 Its main use is with gwene (see the source
 http://lars.ingebrigtsen.no/2011/04/running-rss-to-nntp-gateway.html )
